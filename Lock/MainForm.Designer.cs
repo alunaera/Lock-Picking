@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.gameField = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.gameField)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // gameField
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(624, 529);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.gameField.Location = new System.Drawing.Point(12, 12);
+            this.gameField.Name = "gameField";
+            this.gameField.Size = new System.Drawing.Size(624, 529);
+            this.gameField.TabIndex = 0;
+            this.gameField.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(648, 553);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.gameField);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "MainForm";
             this.Text = "Lock Picking";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameField)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox gameField;
     }
 }
 
