@@ -17,16 +17,16 @@ namespace Lock
         public MasterKey(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
-            Angle = -Math.PI / 2;
+            Angle = 0;
             length = 150;
         }
 
         public void ChangeAngle(int X, int Y)
         {
-            if (StartPosition.X - X == 0)
-                Angle = -Math.PI / 2;
+            if (X - StartPosition.X == 0 || StartPosition.Y - Y == 0)
+                Angle = Math.PI / 2;
             else
-                Angle = Math.Atan(-(StartPosition.Y - Y) / -(StartPosition.X - X)) - Math.PI;
+                Angle = Math.Atan((double)(StartPosition.Y - Y) / (double)(X - StartPosition.X));
         }
 
         //public void TiltStickClockWise()
