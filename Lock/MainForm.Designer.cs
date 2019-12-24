@@ -39,6 +39,7 @@
             this.gameField.Size = new System.Drawing.Size(625, 595);
             this.gameField.TabIndex = 0;
             this.gameField.TabStop = false;
+            this.gameField.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MoveMouse);
             // 
             // MainForm
             // 
@@ -49,7 +50,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "MainForm";
             this.Text = "Lock Picking";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gameField)).EndInit();
             this.ResumeLayout(false);
 
