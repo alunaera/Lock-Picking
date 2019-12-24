@@ -27,7 +27,7 @@ namespace Lock
             game.ChangeMasterKeyAngle(e.X, e.Y);
             label1.Text = (e.X - 242).ToString();
             label2.Text = (240 - e.Y).ToString();
-            label3.Text = (Math.Atan((e.Y - 240) / (e.X - 242))).ToString();
+            label3.Text = (Math.Atan((double)(e.Y - 240) / (double)(240 - e.X))).ToString();
             gameField.Refresh();
         }
     }

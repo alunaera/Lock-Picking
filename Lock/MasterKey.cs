@@ -23,10 +23,10 @@ namespace Lock
 
         public void ChangeAngle(int X, int Y)
         {
-            if (X - StartPosition.X == 0 || StartPosition.Y - Y == 0)
-                Angle = Math.PI / 2;
-            else
-                Angle = Math.Atan((double)(StartPosition.Y - Y) / (double)(X - StartPosition.X));
+            if (StartPosition.Y - Y >= 0)
+                Angle = StartPosition.X - X >= 0 
+                    ? Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - X)) + Math.PI 
+                    : Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - X));
         }
 
         //public void TiltStickClockWise()
