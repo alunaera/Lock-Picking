@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Lock
@@ -27,7 +26,7 @@ namespace Lock
             game.ChangeMasterKeyAngle(e.X, e.Y);
             label1.Text = (e.X - 242).ToString();
             label2.Text = (240 - e.Y).ToString();
-            label3.Text = (Math.Atan((double)(e.Y - 240) / (double)(240 - e.X))).ToString();
+            label3.Text = game.GetAngle();
             gameField.Refresh();
         }
     }

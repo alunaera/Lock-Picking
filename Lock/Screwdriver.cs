@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Lock
 {
-    class MasterKey
+    class Screwdriver
     {
         private int length;
 
@@ -14,19 +14,21 @@ namespace Lock
 
         public double Angle { get; private set; }
 
-        public MasterKey(int startX, int startY)
+        public Screwdriver(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
-            Angle = 0;
+            Angle = Math.PI / 2;
             length = 150;
         }
 
-        public void ChangeAngle(int x, int Y)
+        public void TiltStickClockWise()
         {
-            if (StartPosition.Y - Y >= 0)
-                Angle = StartPosition.X - x >= 0 
-                    ? Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - x)) - Math.PI 
-                    : Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - x));
+            Angle += Math.PI / 50;
+        }
+
+        public void TiltStickCounterClockWise()
+        {
+            Angle -= Math.PI / 50;
         }
     }
 }
