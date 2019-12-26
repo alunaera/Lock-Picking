@@ -5,7 +5,6 @@ namespace Lock
 {
     public partial class MainForm : Form
     {
-
         private readonly Game game = new Game();
 
         public MainForm()
@@ -13,6 +12,8 @@ namespace Lock
             InitializeComponent();
 
             gameField.Paint += Draw;
+
+            game.StartNewRound();
         }
 
         private void Draw(object sender, PaintEventArgs e)
@@ -23,11 +24,13 @@ namespace Lock
 
         private void MoveMouse(object sender, MouseEventArgs e)
         {
-            game.ChangeMasterKeyAngle(e.X, e.Y);
+            game.RotateMasterKey(e.X, e.Y);
+            gameField.Refresh();
+
+            //For development
             label1.Text = (e.X - 242).ToString();
             label2.Text = (240 - e.Y).ToString();
             label3.Text = game.GetAngle();
-            gameField.Refresh();
         }
     }
 }

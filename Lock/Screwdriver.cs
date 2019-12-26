@@ -3,32 +3,42 @@ using System.Drawing;
 
 namespace Lock
 {
-    class Screwdriver
+    internal class Screwdriver
     {
         private int length;
+        private double angle;
 
         public readonly Point StartPosition;
 
-        public Point FinishPosition => new Point((int)(length * Math.Cos(Angle)) + StartPosition.X,
-            (int)(length * Math.Sin(Angle)) + StartPosition.Y);
+        public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
+            (int) (length * Math.Sin(angle)) + StartPosition.Y);
 
-        public double Angle { get; private set; }
 
         public Screwdriver(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
-            Angle = Math.PI / 2;
+            angle = Math.PI / 2;
             length = 150;
+        }
+
+        public double GetAngleInRadians()
+        {
+            return angle;
+        }
+
+        public double GetAngleInDegrees()
+        {
+            return angle * 180 / Math.PI;
         }
 
         public void TiltStickClockWise()
         {
-            Angle += Math.PI / 50;
+            angle += Math.PI / 50;
         }
 
         public void TiltStickCounterClockWise()
         {
-            Angle -= Math.PI / 50;
+            angle -= Math.PI / 50;
         }
     }
 }

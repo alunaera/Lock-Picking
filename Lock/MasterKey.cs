@@ -3,30 +3,39 @@ using System.Drawing;
 
 namespace Lock
 {
-    class MasterKey
+    internal class MasterKey
     {
-        private int length;
+        private readonly int length;
+        private double angle;
 
         public readonly Point StartPosition;
 
-        public Point FinishPosition => new Point((int)(length * Math.Cos(Angle)) + StartPosition.X,
-            (int)(length * Math.Sin(Angle)) + StartPosition.Y);
-
-        public double Angle { get; private set; }
+        public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
+            (int) (length * Math.Sin(angle)) + StartPosition.Y);
 
         public MasterKey(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
-            Angle = 0;
+            angle = 0;
             length = 150;
+        }
+
+        public double GetAngleInRadians()
+        {
+            return angle;
+        }
+
+        public double GetAngleInDegrees()
+        {
+            return angle * 180 / Math.PI;
         }
 
         public void ChangeAngle(int x, int Y)
         {
             if (StartPosition.Y - Y >= 0)
-                Angle = StartPosition.X - x >= 0 
-                    ? Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - x)) - Math.PI 
-                    : Math.Atan((double)(StartPosition.Y - Y) / (StartPosition.X - x));
+                angle = StartPosition.X - x >= 0
+                    ? Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x)) - Math.PI
+                    : Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x));
         }
     }
 }
