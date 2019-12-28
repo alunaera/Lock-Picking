@@ -3,6 +3,6 @@
     internal enum GamePhase
     {
         RotateMasterKey,
-        MoveScrewdriver
+        MoveScrewdriverClockWise
     }
 }

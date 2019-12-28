@@ -10,9 +10,12 @@ namespace Lock
 
         public readonly Point StartPosition;
 
+        public MasterKeyPosition Position;
+        public double WinAngle;
+
         public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
             (int) (length * Math.Sin(angle)) + StartPosition.Y);
-
+        
         public MasterKey(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
@@ -36,6 +39,17 @@ namespace Lock
                 angle = StartPosition.X - x >= 0
                     ? Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x)) - Math.PI
                     : Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x));
+
+            double angleInDegrees = angle * 180 / Math.PI;
+
+            if (angleInDegrees  < WinAngle + 5 && angleInDegrees > WinAngle - 5)
+                Position = MasterKeyPosition.InWinSector;
+
+            if (angleInDegrees > WinAngle + 5 || angleInDegrees < WinAngle - 5)
+                Position = MasterKeyPosition.NearWinSector;
+
+            if (angleInDegrees > WinAngle + 20 || angleInDegrees < WinAngle - 20)
+                Position = MasterKeyPosition.OutOfWinSector;
         }
     }
 }

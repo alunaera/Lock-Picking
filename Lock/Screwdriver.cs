@@ -33,12 +33,12 @@ namespace Lock
 
         public void TiltStickClockWise()
         {
-            angle += Math.PI / 50;
+            angle += Math.PI / 125;
         }
 
         public void TiltStickCounterClockWise()
         {
-            angle -= Math.PI / 50;
+            angle -= Math.PI / 125;
         }
     }
 }
