@@ -6,6 +6,7 @@ namespace Lock
     internal class MasterKey
     {
         private readonly int length;
+
         private double angle;
 
         public readonly Point StartPosition;
@@ -15,22 +16,12 @@ namespace Lock
 
         public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
             (int) (length * Math.Sin(angle)) + StartPosition.Y);
-        
+
         public MasterKey(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
             angle = 0;
             length = 150;
-        }
-
-        public double GetAngleInRadians()
-        {
-            return angle;
-        }
-
-        public double GetAngleInDegrees()
-        {
-            return angle * 180 / Math.PI;
         }
 
         public void ChangeAngle(int x, int Y)
@@ -42,14 +33,24 @@ namespace Lock
 
             double angleInDegrees = angle * 180 / Math.PI;
 
-            if (angleInDegrees  < WinAngle + 5 && angleInDegrees > WinAngle - 5)
+            if (angleInDegrees < WinAngle + 5 && angleInDegrees > WinAngle - 5)
                 Position = MasterKeyPosition.InWinSector;
 
             if (angleInDegrees > WinAngle + 5 || angleInDegrees < WinAngle - 5)
                 Position = MasterKeyPosition.NearWinSector;
 
-            if (angleInDegrees > WinAngle + 20 || angleInDegrees < WinAngle - 20)
+            if (angleInDegrees > WinAngle + 30 || angleInDegrees < WinAngle - 30)
                 Position = MasterKeyPosition.OutOfWinSector;
+        }
+
+        public void SetStartAngle()
+        {
+            angle = -Math.PI / 2;
+        }
+
+        public double GetAngleInDegrees()
+        {
+            return angle * 180 / Math.PI;
         }
     }
 }

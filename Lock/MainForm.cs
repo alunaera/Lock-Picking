@@ -8,15 +8,13 @@ namespace Lock
     {
         private readonly Game game = new Game();
 
-        private Point cursorPosition;
-
         public MainForm()
         {
             InitializeComponent();
 
             gameField.Paint += Draw;
 
-            game.StartNewRound();
+            game.StartNewGame();
         }
 
         private void Draw(object sender, PaintEventArgs e)
@@ -27,12 +25,7 @@ namespace Lock
 
         private void MoveMouse(object sender, MouseEventArgs e)
         {
-            cursorPosition = new Point(e.X, e.Y);
-
-            //For development
-            label1.Text = (e.X - 242).ToString();
-            label2.Text = (240 - e.Y).ToString();
-            label3.Text = game.GetMasterKeyPosition();
+            game.CursorPosition = new Point(e.X, e.Y);
         }
 
         private void DownKey(object sender, KeyEventArgs e)
@@ -49,8 +42,19 @@ namespace Lock
 
         private void TickTimer(object sender, System.EventArgs e)
         {
-            game.Update(cursorPosition);
+            game.Update();
             gameField.Refresh();
+        }
+
+        private void ClickNewGame(object sender, System.EventArgs e)
+        {
+            game.StartNewGame();
+        }
+
+        private void ClickHelp(object sender, System.EventArgs e)
+        {
+            MessageBox.Show("Move mouse - rotate master key \n" +
+                            "Press Space - start lock's opening");
         }
     }
 }
