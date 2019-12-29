@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Lock
 {
-    class Game
+    internal class Game
     {
         private readonly MasterKey masterKey = new MasterKey(CenterX, CenterY - 10);
         private readonly Screwdriver screwdriver = new Screwdriver(CenterX, CenterY + 15);
@@ -12,6 +12,7 @@ namespace Lock
 
         private Pen masterKeyPen;
         private Pen screwdriverPen;
+        private MasterKeyPosition masterKeyPosition;
         private int masterKeyStrength;
         private int brokenMasterKeysCount;
         private int openedLocksCount;
@@ -45,6 +46,8 @@ namespace Lock
 
         private void CreateNewMasterKey()
         {
+            GamePhase = GamePhase.RotateMasterKey;
+
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
             masterKeyStrength = 70;
@@ -54,6 +57,8 @@ namespace Lock
 
         private void CreateNewWinAngle()
         {
+            GamePhase = GamePhase.RotateMasterKey;
+
             masterKey.WinAngle = GetNewWinAngle();
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
@@ -68,6 +73,8 @@ namespace Lock
 
         public void Update()
         {
+            SetMasterKeyPosition();
+
             switch (GamePhase)
             {
                 case GamePhase.RotateMasterKey:
@@ -90,7 +97,7 @@ namespace Lock
 
         private void MoveScrewdriverClockWise()
         {
-            switch (masterKey.Position)
+            switch (masterKeyPosition)
             {
                 case MasterKeyPosition.OutOfWinSector:
                     masterKeyPen.Color = Color.Red;
@@ -137,6 +144,21 @@ namespace Lock
 
                     break;
             }
+        }
+
+        private void SetMasterKeyPosition()
+        {
+            if (masterKey.GetAngleInDegrees() < masterKey.WinAngle + 5 &&
+                masterKey.GetAngleInDegrees() > masterKey.WinAngle - 5)
+                masterKeyPosition = MasterKeyPosition.InWinSector;
+
+            if (masterKey.GetAngleInDegrees() > masterKey.WinAngle + 5 ||
+                masterKey.GetAngleInDegrees() < masterKey.WinAngle - 5)
+                masterKeyPosition = MasterKeyPosition.NearWinSector;
+
+            if (masterKey.GetAngleInDegrees() > masterKey.WinAngle + 30 ||
+                masterKey.GetAngleInDegrees() < masterKey.WinAngle - 30)
+                masterKeyPosition = MasterKeyPosition.OutOfWinSector;
         }
 
         public void Draw(Graphics graphics)

@@ -11,7 +11,6 @@ namespace Lock
 
         public readonly Point StartPosition;
 
-        public MasterKeyPosition Position;
         public double WinAngle;
 
         public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
@@ -33,14 +32,6 @@ namespace Lock
 
             double angleInDegrees = angle * 180 / Math.PI;
 
-            if (angleInDegrees < WinAngle + 5 && angleInDegrees > WinAngle - 5)
-                Position = MasterKeyPosition.InWinSector;
-
-            if (angleInDegrees > WinAngle + 5 || angleInDegrees < WinAngle - 5)
-                Position = MasterKeyPosition.NearWinSector;
-
-            if (angleInDegrees > WinAngle + 30 || angleInDegrees < WinAngle - 30)
-                Position = MasterKeyPosition.OutOfWinSector;
         }
 
         public void SetStartAngle()
