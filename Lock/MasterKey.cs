@@ -24,12 +24,12 @@ namespace Lock
             length = 150;
         }
 
-        public void ChangeAngle(int x, int Y)
+        public void ChangeAngle(int x, int y)
         {
-            if (StartPosition.Y - Y >= 0)
+            if (StartPosition.Y - y >= 0)
                 angle = StartPosition.X - x >= 0
-                    ? Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x)) - Math.PI
-                    : Math.Atan((double) (StartPosition.Y - Y) / (StartPosition.X - x));
+                    ? Math.Atan((double) (StartPosition.Y - y) / (StartPosition.X - x)) - Math.PI
+                    : Math.Atan((double) (StartPosition.Y - y) / (StartPosition.X - x));
 
             double angleInDegrees = angle * 180 / Math.PI;
 

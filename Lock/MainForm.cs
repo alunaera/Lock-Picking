@@ -17,6 +17,12 @@ namespace Lock
             game.StartNewGame();
         }
 
+        private void TickTimer(object sender, System.EventArgs e)
+        {
+            game.Update();
+            gameField.Refresh();
+        }
+
         private void Draw(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -26,6 +32,17 @@ namespace Lock
         private void MoveMouse(object sender, MouseEventArgs e)
         {
             game.CursorPosition = new Point(e.X, e.Y);
+        }
+
+        private void ClickNewGame(object sender, System.EventArgs e)
+        {
+            game.StartNewGame();
+        }
+
+        private void ClickHelp(object sender, System.EventArgs e)
+        {
+            MessageBox.Show("Move mouse - rotate master key \n" +
+                            "Press Space - start lock's opening");
         }
 
         private void DownKey(object sender, KeyEventArgs e)
@@ -38,23 +55,6 @@ namespace Lock
         {
             if (e.KeyCode == Keys.Space)
                 game.GamePhase = GamePhase.RotateMasterKey;
-        }
-
-        private void TickTimer(object sender, System.EventArgs e)
-        {
-            game.Update();
-            gameField.Refresh();
-        }
-
-        private void ClickNewGame(object sender, System.EventArgs e)
-        {
-            game.StartNewGame();
-        }
-
-        private void ClickHelp(object sender, System.EventArgs e)
-        {
-            MessageBox.Show("Move mouse - rotate master key \n" +
-                            "Press Space - start lock's opening");
         }
     }
 }

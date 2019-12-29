@@ -12,7 +12,7 @@ namespace Lock
 
         private Pen masterKeyPen;
         private Pen screwdriverPen;
-        private int masterKeyHealPoints;
+        private int masterKeyStrength;
         private int brokenMasterKeysCount;
         private int openedLocksCount;
 
@@ -22,7 +22,7 @@ namespace Lock
 
         public Point CursorPosition { private get; set; }
         public GamePhase GamePhase;
-        
+
         public Game()
         {
             random = new Random();
@@ -37,7 +37,7 @@ namespace Lock
 
             masterKey.WinAngle = GetNewWinAngle();
             masterKeyPen = new Pen(Color.Green, 5);
-            masterKeyHealPoints = 70;
+            masterKeyStrength = 70;
 
             screwdriver.SetStartAngle();
             screwdriverPen = new Pen(Color.DarkBlue, 5);
@@ -47,7 +47,7 @@ namespace Lock
         {
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
-            masterKeyHealPoints = 70;
+            masterKeyStrength = 70;
 
             screwdriver.SetStartAngle();
         }
@@ -57,7 +57,7 @@ namespace Lock
             masterKey.WinAngle = GetNewWinAngle();
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
-            
+
             screwdriver.SetStartAngle();
         }
 
@@ -71,7 +71,7 @@ namespace Lock
             switch (GamePhase)
             {
                 case GamePhase.RotateMasterKey:
-                    RotateMasterKey(CursorPosition.X, CursorPosition.Y);
+                    RotateMasterKey();
                     break;
                 case GamePhase.MoveScrewdriverClockWise:
                     MoveScrewdriverClockWise();
@@ -79,10 +79,10 @@ namespace Lock
             }
         }
 
-        private void RotateMasterKey(int positionX, int positionY)
+        private void RotateMasterKey()
         {
             masterKeyPen.Color = Color.Green;
-            masterKey.ChangeAngle(positionX, positionY);
+            masterKey.ChangeAngle(CursorPosition.X, CursorPosition.Y);
 
             if (screwdriver.GetAngleInRadians() > Math.PI / 2)
                 screwdriver.RotateStickCounterClockWise();
@@ -94,9 +94,9 @@ namespace Lock
             {
                 case MasterKeyPosition.OutOfWinSector:
                     masterKeyPen.Color = Color.Red;
-                    masterKeyHealPoints--;
+                    masterKeyStrength--;
 
-                    if (masterKeyHealPoints == 0)
+                    if (masterKeyStrength == 0)
                     {
                         brokenMasterKeysCount++;
                         CreateNewMasterKey();
@@ -106,7 +106,7 @@ namespace Lock
 
                 case MasterKeyPosition.NearWinSector:
                     double screwdriverMaxAngle =
-                        Math.PI - (Math.Abs(masterKey.WinAngle - masterKey.GetAngleInDegrees()) - 5) / 60 * Math.PI;
+                        Math.PI * (1 - (Math.Abs(masterKey.WinAngle - masterKey.GetAngleInDegrees()) - 5) / 60);
 
                     if (screwdriver.GetAngleInRadians() < screwdriverMaxAngle)
                         screwdriver.RotateStickClockWise();
@@ -114,9 +114,9 @@ namespace Lock
                     if (screwdriver.GetAngleInRadians() >= screwdriverMaxAngle)
                     {
                         masterKeyPen.Color = Color.Red;
-                        masterKeyHealPoints--;
+                        masterKeyStrength--;
 
-                        if (masterKeyHealPoints == 0)
+                        if (masterKeyStrength == 0)
                         {
                             brokenMasterKeysCount++;
                             CreateNewMasterKey();
