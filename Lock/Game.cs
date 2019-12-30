@@ -8,10 +8,10 @@ namespace Lock
         private readonly MasterKey masterKey = new MasterKey(CenterX, CenterY - 10);
         private readonly Screwdriver screwdriver = new Screwdriver(CenterX, CenterY + 15);
         private readonly Font font = new Font("Arial", 12);
+        private readonly Pen masterKeyPen;
+        private readonly Pen screwdriverPen;
         private readonly Random random;
 
-        private Pen masterKeyPen;
-        private Pen screwdriverPen;
         private MasterKeyPosition masterKeyPosition;
         private int masterKeyStrength;
         private int brokenMasterKeysCount;
@@ -21,81 +21,70 @@ namespace Lock
         private const int CenterX = 242;
         private const int CenterY = 250;
 
-        public Point CursorPosition { private get; set; }
         public GamePhase GamePhase;
 
         public Game()
         {
             random = new Random();
+
+            masterKeyPen = new Pen(Color.Green, 5);
+            screwdriverPen = new Pen(Color.DarkBlue, 5);
         }
 
         public void StartNewGame()
         {
-            GamePhase = GamePhase.RotateMasterKey;
-
             brokenMasterKeysCount = 0;
             openedLocksCount = 0;
 
-            masterKey.WinAngle = GetNewWinAngle();
-            masterKeyPen = new Pen(Color.Green, 5);
-            masterKeyStrength = 70;
-
-            screwdriver.SetStartAngle();
-            screwdriverPen = new Pen(Color.DarkBlue, 5);
+            CreateNewWinAngle();
+            CreateNewMasterKey();
         }
 
         private void CreateNewMasterKey()
         {
-            GamePhase = GamePhase.RotateMasterKey;
-
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
-            masterKeyStrength = 70;
+            masterKeyStrength = 100;
 
             screwdriver.SetStartAngle();
         }
 
         private void CreateNewWinAngle()
         {
-            GamePhase = GamePhase.RotateMasterKey;
-
-            masterKey.WinAngle = GetNewWinAngle();
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
+            masterKey.WinAngle = -random.Next(20, 160);
 
             screwdriver.SetStartAngle();
         }
 
-        private double GetNewWinAngle()
+        public void RotateMasterKey(int positionX, int positionY)
         {
-            return -random.Next(20, 160);
+            masterKey.ChangeAngle(positionX, positionY);
         }
 
         public void Update()
         {
-            SetMasterKeyPosition();
-
             switch (GamePhase)
             {
-                case GamePhase.RotateMasterKey:
-                    RotateMasterKey();
+                case GamePhase.PreparationToLocking:
+                    PreparationToLocking();
                     break;
-                case GamePhase.MoveScrewdriverClockWise:
-                    MoveScrewdriverClockWise();
+                case GamePhase.StartLocking:
+                    StartLocking();
                     break;
             }
         }
 
-        private void RotateMasterKey()
+        private void PreparationToLocking()
         {
             masterKeyPen.Color = Color.Green;
-            masterKey.ChangeAngle(CursorPosition.X, CursorPosition.Y);
 
-            if (screwdriver.GetAngleInRadians() > Math.PI / 2)
-                screwdriver.RotateStickCounterClockWise();
+            if (screwdriver.AngleInRadians > Math.PI / 2)
+                screwdriver.RotateCounterClockWise();
         }
 
-        private void MoveScrewdriverClockWise()
+        private void StartLocking()
         {
             switch (masterKeyPosition)
             {
@@ -113,12 +102,12 @@ namespace Lock
 
                 case MasterKeyPosition.NearWinSector:
                     double screwdriverMaxAngle =
-                        Math.PI * (1 - (Math.Abs(masterKey.WinAngle - masterKey.GetAngleInDegrees()) - 5) / 60);
+                        Math.PI * (1 - (Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle) - 5) / 60);
 
-                    if (screwdriver.GetAngleInRadians() < screwdriverMaxAngle)
-                        screwdriver.RotateStickClockWise();
+                    if (screwdriver.AngleInRadians < screwdriverMaxAngle)
+                        screwdriver.RotateClockWise();
 
-                    if (screwdriver.GetAngleInRadians() >= screwdriverMaxAngle)
+                    if (screwdriver.AngleInRadians >= screwdriverMaxAngle)
                     {
                         masterKeyPen.Color = Color.Red;
                         masterKeyStrength--;
@@ -133,10 +122,10 @@ namespace Lock
                     break;
 
                 case MasterKeyPosition.InWinSector:
-                    if (screwdriver.GetAngleInRadians() < Math.PI)
-                        screwdriver.RotateStickClockWise();
+                    if (screwdriver.AngleInRadians < Math.PI)
+                        screwdriver.RotateClockWise();
 
-                    if (screwdriver.GetAngleInRadians() >= Math.PI)
+                    if (screwdriver.AngleInRadians >= Math.PI)
                     {
                         openedLocksCount++;
                         CreateNewWinAngle();
@@ -144,20 +133,14 @@ namespace Lock
 
                     break;
             }
-        }
 
-        private void SetMasterKeyPosition()
-        {
-            if (masterKey.GetAngleInDegrees() < masterKey.WinAngle + 5 &&
-                masterKey.GetAngleInDegrees() > masterKey.WinAngle - 5)
+            double masterKeyDeviationFromWinAngle = Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle);
+
+            if (masterKeyDeviationFromWinAngle <= 5)
                 masterKeyPosition = MasterKeyPosition.InWinSector;
-
-            if (masterKey.GetAngleInDegrees() > masterKey.WinAngle + 5 ||
-                masterKey.GetAngleInDegrees() < masterKey.WinAngle - 5)
+            else if (masterKeyDeviationFromWinAngle < 30)
                 masterKeyPosition = MasterKeyPosition.NearWinSector;
-
-            if (masterKey.GetAngleInDegrees() > masterKey.WinAngle + 30 ||
-                masterKey.GetAngleInDegrees() < masterKey.WinAngle - 30)
+            else
                 masterKeyPosition = MasterKeyPosition.OutOfWinSector;
         }
 

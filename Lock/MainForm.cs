@@ -31,7 +31,7 @@ namespace Lock
 
         private void MoveMouse(object sender, MouseEventArgs e)
         {
-            game.CursorPosition = new Point(e.X, e.Y);
+            game.RotateMasterKey(e.X, e.Y);
         }
 
         private void ClickNewGame(object sender, System.EventArgs e)
@@ -48,13 +48,13 @@ namespace Lock
         private void DownKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
-                game.GamePhase = GamePhase.MoveScrewdriverClockWise;
+                game.GamePhase = GamePhase.StartLocking;
         }
 
         private void UpKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
-                game.GamePhase = GamePhase.RotateMasterKey;
+                game.GamePhase = GamePhase.PreparationToLocking;
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     internal enum GamePhase
     {
-        RotateMasterKey,
-        MoveScrewdriverClockWise
+        PreparationToLocking,
+        StartLocking
     }
 }

@@ -7,38 +7,33 @@ namespace Lock
     {
         private readonly int length;
 
-        private double angle;
-
         public readonly Point StartPosition;
 
-        public Point FinishPosition => new Point((int) (length * Math.Cos(angle)) + StartPosition.X,
-            (int) (length * Math.Sin(angle)) + StartPosition.Y);
+        public double AngleInRadians { get; private set; }
+
+        public Point FinishPosition => new Point((int) (length * Math.Cos(AngleInRadians)) + StartPosition.X,
+            (int) (length * Math.Sin(AngleInRadians)) + StartPosition.Y);
 
         public Screwdriver(int startX, int startY)
         {
             StartPosition = new Point(startX, startY);
-            angle = Math.PI / 2;
+            AngleInRadians = Math.PI / 2;
             length = 150;
         }
 
-        public void RotateStickClockWise()
+        public void RotateClockWise()
         {
-            angle += Math.PI / 150;
+            AngleInRadians += Math.PI / 150;
         }
 
-        public void RotateStickCounterClockWise()
+        public void RotateCounterClockWise()
         {
-            angle -= Math.PI / 125;
-        }
-
-        public double GetAngleInRadians()
-        {
-            return angle;
+            AngleInRadians -= Math.PI / 125;
         }
 
         public void SetStartAngle()
         {
-            angle = Math.PI / 2;
+            AngleInRadians = Math.PI / 2;
         }
     }
 }
