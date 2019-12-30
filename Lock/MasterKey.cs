@@ -30,9 +30,6 @@ namespace Lock
                 angleInRadians = StartPosition.X - x >= 0
                     ? Math.Atan((double) (StartPosition.Y - y) / (StartPosition.X - x)) - Math.PI
                     : Math.Atan((double) (StartPosition.Y - y) / (StartPosition.X - x));
-
-            double angleInDegrees = angleInRadians * 180 / Math.PI;
-
         }
 
         public void SetStartAngle()

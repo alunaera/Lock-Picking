@@ -13,6 +13,7 @@ namespace Lock
         private readonly Random random;
 
         private MasterKeyPosition masterKeyPosition;
+        private GamePhase gamePhase;
         private int masterKeyStrength;
         private int brokenMasterKeysCount;
         private int openedLocksCount;
@@ -20,8 +21,6 @@ namespace Lock
         //It's window's center for correct animation
         private const int CenterX = 242;
         private const int CenterY = 250;
-
-        public GamePhase GamePhase;
 
         public Game()
         {
@@ -60,23 +59,24 @@ namespace Lock
 
         public void RotateMasterKey(int positionX, int positionY)
         {
-            masterKey.ChangeAngle(positionX, positionY);
+            if (gamePhase == GamePhase.RotateMasterKey)
+                masterKey.ChangeAngle(positionX, positionY);
         }
 
         public void Update()
         {
-            switch (GamePhase)
+            switch (gamePhase)
             {
-                case GamePhase.PreparationToLocking:
-                    PreparationToLocking();
+                case GamePhase.RotateMasterKey:
+                    RotateMasterKey();
                     break;
-                case GamePhase.StartLocking:
-                    StartLocking();
+                case GamePhase.MoveScrewdriver:
+                    MoveScrewdriver();
                     break;
             }
         }
 
-        private void PreparationToLocking()
+        private void RotateMasterKey()
         {
             masterKeyPen.Color = Color.Green;
 
@@ -84,7 +84,7 @@ namespace Lock
                 screwdriver.RotateCounterClockWise();
         }
 
-        private void StartLocking()
+        private void MoveScrewdriver()
         {
             switch (masterKeyPosition)
             {
@@ -142,6 +142,16 @@ namespace Lock
                 masterKeyPosition = MasterKeyPosition.NearWinSector;
             else
                 masterKeyPosition = MasterKeyPosition.OutOfWinSector;
+        }
+
+        public void StartLocking()
+        {
+            gamePhase = GamePhase.MoveScrewdriver;
+        }
+
+        public void StopLocking()
+        {
+            gamePhase = GamePhase.RotateMasterKey;
         }
 
         public void Draw(Graphics graphics)

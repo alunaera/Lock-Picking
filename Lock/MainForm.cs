@@ -48,13 +48,13 @@ namespace Lock
         private void DownKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
-                game.GamePhase = GamePhase.StartLocking;
+                game.StartLocking();
         }
 
         private void UpKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
-                game.GamePhase = GamePhase.PreparationToLocking;
+                game.StopLocking();
         }
     }
 }
