@@ -12,7 +12,6 @@ namespace Lock
         private readonly Pen screwdriverPen;
         private readonly Random random;
 
-        private MasterKeyPosition masterKeyPosition;
         private GamePhase gamePhase;
         private int masterKeyStrength;
         private int brokenMasterKeysCount;
@@ -86,6 +85,17 @@ namespace Lock
 
         private void MoveScrewdriver()
         {
+            MasterKeyPosition masterKeyPosition;
+
+            double masterKeyDeviationFromWinAngle = Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle);
+
+            if (masterKeyDeviationFromWinAngle <= 5)
+                masterKeyPosition = MasterKeyPosition.InWinSector;
+            else if (masterKeyDeviationFromWinAngle < 30)
+                masterKeyPosition = MasterKeyPosition.NearWinSector;
+            else
+                masterKeyPosition = MasterKeyPosition.OutOfWinSector;
+
             switch (masterKeyPosition)
             {
                 case MasterKeyPosition.OutOfWinSector:
@@ -134,14 +144,6 @@ namespace Lock
                     break;
             }
 
-            double masterKeyDeviationFromWinAngle = Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle);
-
-            if (masterKeyDeviationFromWinAngle <= 5)
-                masterKeyPosition = MasterKeyPosition.InWinSector;
-            else if (masterKeyDeviationFromWinAngle < 30)
-                masterKeyPosition = MasterKeyPosition.NearWinSector;
-            else
-                masterKeyPosition = MasterKeyPosition.OutOfWinSector;
         }
 
         public void StartLocking()
