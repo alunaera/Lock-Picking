@@ -13,7 +13,6 @@ namespace Lock
         private readonly Random random;
 
         private GamePhase gamePhase;
-        private int masterKeyStrength;
         private int brokenMasterKeysCount;
         private int openedLocksCount;
 
@@ -42,7 +41,7 @@ namespace Lock
         {
             masterKeyPen.Color = Color.Green;
             masterKey.SetStartAngle();
-            masterKeyStrength = 100;
+            masterKey.SetFullStrength();
 
             screwdriver.SetStartAngle();
         }
@@ -100,9 +99,9 @@ namespace Lock
             {
                 case MasterKeyPosition.OutOfWinSector:
                     masterKeyPen.Color = Color.Red;
-                    masterKeyStrength--;
+                    masterKey.DecreaseStrength();
 
-                    if (masterKeyStrength == 0)
+                    if (masterKey.Strength == 0)
                     {
                         brokenMasterKeysCount++;
                         CreateNewMasterKey();
@@ -116,13 +115,12 @@ namespace Lock
 
                     if (screwdriver.AngleInRadians < screwdriverMaxAngle)
                         screwdriver.RotateClockWise();
-
-                    if (screwdriver.AngleInRadians >= screwdriverMaxAngle)
+                    else
                     {
                         masterKeyPen.Color = Color.Red;
-                        masterKeyStrength--;
+                        masterKey.DecreaseStrength();
 
-                        if (masterKeyStrength == 0)
+                        if (masterKey.Strength == 0)
                         {
                             brokenMasterKeysCount++;
                             CreateNewMasterKey();
@@ -134,8 +132,7 @@ namespace Lock
                 case MasterKeyPosition.InWinSector:
                     if (screwdriver.AngleInRadians < Math.PI)
                         screwdriver.RotateClockWise();
-
-                    if (screwdriver.AngleInRadians >= Math.PI)
+                    else
                     {
                         openedLocksCount++;
                         CreateNewWinAngle();
@@ -143,7 +140,6 @@ namespace Lock
 
                     break;
             }
-
         }
 
         public void StartLocking()

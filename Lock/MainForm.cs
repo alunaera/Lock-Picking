@@ -1,12 +1,11 @@
-﻿using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Lock
 {
     public partial class MainForm : Form
     {
-        private readonly Game game = new Game();
+        private Game game = new Game();
 
         public MainForm()
         {

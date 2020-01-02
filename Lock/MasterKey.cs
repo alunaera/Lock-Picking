@@ -12,6 +12,7 @@ namespace Lock
         public readonly Point StartPosition;
 
         public double WinAngle;
+        public int Strength { get; private set; }
 
         public double AngleInDegrees => angleInRadians * 180 / Math.PI;
         public Point FinishPosition => new Point((int) (length * Math.Cos(angleInRadians)) + StartPosition.X,
@@ -21,6 +22,7 @@ namespace Lock
         {
             StartPosition = new Point(startX, startY);
             SetStartAngle();
+            SetFullStrength();
             length = 150;
         }
 
@@ -35,6 +37,16 @@ namespace Lock
         public void SetStartAngle()
         {
             angleInRadians = -Math.PI / 2;
+        }
+
+        public void SetFullStrength()
+        {
+            Strength = 100;
+        }
+
+        public void DecreaseStrength()
+        {
+            Strength--;
         }
     }
 }
