@@ -34,31 +34,23 @@ namespace Lock
             openedLocksCount = 0;
 
             CreateNewWinAngle();
-            CreateNewMasterKey();
+            RepairMasterKey();
         }
 
-        private void CreateNewMasterKey()
-        {
-            masterKeyPen.Color = Color.Green;
-            masterKey.SetStartAngle();
-            masterKey.SetFullStrength();
-
-            screwdriver.SetStartAngle();
-        }
-
-        private void CreateNewWinAngle()
-        {
-            masterKeyPen.Color = Color.Green;
-            masterKey.SetStartAngle();
-            masterKey.WinAngle = -random.Next(20, 160);
-
-            screwdriver.SetStartAngle();
-        }
-
-        public void RotateMasterKey(int positionX, int positionY)
+        public void ChangeMasterKeyAngle(int positionX, int positionY)
         {
             if (gamePhase == GamePhase.RotateMasterKey)
                 masterKey.ChangeAngle(positionX, positionY);
+        }
+
+        public void StartLocking()
+        {
+            gamePhase = GamePhase.MoveScrewdriver;
+        }
+
+        public void StopLocking()
+        {
+            gamePhase = GamePhase.RotateMasterKey;
         }
 
         public void Update()
@@ -84,72 +76,71 @@ namespace Lock
 
         private void MoveScrewdriver()
         {
-            MasterKeyPosition masterKeyPosition;
-
             double masterKeyDeviationFromWinAngle = Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle);
 
+            //In win sector
             if (masterKeyDeviationFromWinAngle <= 5)
-                masterKeyPosition = MasterKeyPosition.InWinSector;
-            else if (masterKeyDeviationFromWinAngle < 30)
-                masterKeyPosition = MasterKeyPosition.NearWinSector;
-            else
-                masterKeyPosition = MasterKeyPosition.OutOfWinSector;
-
-            switch (masterKeyPosition)
             {
-                case MasterKeyPosition.OutOfWinSector:
+                if (screwdriver.AngleInRadians < Math.PI)
+                    screwdriver.RotateClockWise();
+                else
+                {
+                    openedLocksCount++;
+                    CreateNewWinAngle();
+                }
+            }
+
+            //Near win sector
+            if (masterKeyDeviationFromWinAngle <= 30)
+            {
+                double screwdriverMaxAngle =
+                    Math.PI * (1 - (Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle) - 5) / 60);
+
+                if (screwdriver.AngleInRadians < screwdriverMaxAngle)
+                    screwdriver.RotateClockWise();
+                else
+                {
                     masterKeyPen.Color = Color.Red;
                     masterKey.DecreaseStrength();
 
-                    if (masterKey.Strength == 0)
-                    {
-                        brokenMasterKeysCount++;
-                        CreateNewMasterKey();
-                    }
+                    if (masterKey.Strength != 0)
+                        return;
 
-                    break;
+                    brokenMasterKeysCount++;
+                    RepairMasterKey();
+                }
+            }
 
-                case MasterKeyPosition.NearWinSector:
-                    double screwdriverMaxAngle =
-                        Math.PI * (1 - (Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle) - 5) / 60);
+            //Out of win sector
+            if (masterKeyDeviationFromWinAngle > 30)
+            {
+                masterKeyPen.Color = Color.Red;
+                masterKey.DecreaseStrength();
 
-                    if (screwdriver.AngleInRadians < screwdriverMaxAngle)
-                        screwdriver.RotateClockWise();
-                    else
-                    {
-                        masterKeyPen.Color = Color.Red;
-                        masterKey.DecreaseStrength();
+                if (masterKey.Strength != 0)
+                    return;
 
-                        if (masterKey.Strength == 0)
-                        {
-                            brokenMasterKeysCount++;
-                            CreateNewMasterKey();
-                        }
-                    }
-
-                    break;
-
-                case MasterKeyPosition.InWinSector:
-                    if (screwdriver.AngleInRadians < Math.PI)
-                        screwdriver.RotateClockWise();
-                    else
-                    {
-                        openedLocksCount++;
-                        CreateNewWinAngle();
-                    }
-
-                    break;
+                brokenMasterKeysCount++;
+                RepairMasterKey();
             }
         }
 
-        public void StartLocking()
+        private void RepairMasterKey()
         {
-            gamePhase = GamePhase.MoveScrewdriver;
+            masterKeyPen.Color = Color.Green;
+            masterKey.SetStartAngle();
+            masterKey.SetFullStrength();
+
+            screwdriver.SetStartAngle();
         }
 
-        public void StopLocking()
+        private void CreateNewWinAngle()
         {
-            gamePhase = GamePhase.RotateMasterKey;
+            masterKeyPen.Color = Color.Green;
+            masterKey.SetStartAngle();
+            masterKey.WinAngle = -random.Next(20, 160);
+
+            screwdriver.SetStartAngle();
         }
 
         public void Draw(Graphics graphics)

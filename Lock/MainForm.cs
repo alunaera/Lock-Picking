@@ -30,7 +30,7 @@ namespace Lock
 
         private void MoveMouse(object sender, MouseEventArgs e)
         {
-            game.RotateMasterKey(e.X, e.Y);
+            game.ChangeMasterKeyAngle(e.X, e.Y);
         }
 
         private void ClickNewGame(object sender, System.EventArgs e)
