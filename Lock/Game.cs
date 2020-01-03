@@ -16,7 +16,7 @@ namespace Lock
         private int brokenMasterKeysCount;
         private int openedLocksCount;
 
-        //It's window's center for correct animation
+        // It's window's center for correct animation
         private const int CenterX = 242;
         private const int CenterY = 250;
 
@@ -78,7 +78,7 @@ namespace Lock
         {
             double masterKeyDeviationFromWinAngle = Math.Abs(masterKey.AngleInDegrees - masterKey.WinAngle);
 
-            //In win sector
+            // In win sector
             if (masterKeyDeviationFromWinAngle <= 5)
             {
                 if (screwdriver.AngleInRadians < Math.PI)
@@ -90,7 +90,7 @@ namespace Lock
                 }
             }
 
-            //Near win sector
+            // Near win sector
             if (masterKeyDeviationFromWinAngle <= 30)
             {
                 double screwdriverMaxAngle =
@@ -111,7 +111,7 @@ namespace Lock
                 }
             }
 
-            //Out of win sector
+            // Out of win sector
             if (masterKeyDeviationFromWinAngle > 30)
             {
                 masterKeyPen.Color = Color.Red;
